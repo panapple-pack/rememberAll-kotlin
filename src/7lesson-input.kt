@@ -3,7 +3,7 @@ import kotlin.random.Random
 open class Character(val name: String, var health: Int, var attack: Int) {
     val isAlive: Boolean get() = health > 0
 
-    fun takeDamage(damage: Int) {
+    open fun takeDamage(damage: Int) {
         health -= damage
         println("$name получает $damage")
         if (health <= 0) println("$name пал в бою")
@@ -19,6 +19,7 @@ open class Character(val name: String, var health: Int, var attack: Int) {
 
 class Player(name: String, health: Int, attack: Int) : Character(name, health, attack) {
     var potions = 3  // количество зельев здоровья (индивидуальный атрибут (параметр) дочернего класса)
+    var armor: Boolean = false
 
     fun usePotions() {
         if (potions > 0) {
@@ -37,6 +38,19 @@ class Player(name: String, health: Int, attack: Int) : Character(name, health, a
         println("ATK: $attack")
         println("Зелья: $potions")
         println("=================")
+    }
+
+    fun shield() {
+        armor = true
+    }
+
+    override fun takeDamage(damage: Int) {
+        if (armor) {
+            health -= damage / 2
+            println("$name получает $damage")
+        } else {
+            super.takeDamage(damage)
+        }
     }
 }
 
@@ -99,13 +113,16 @@ fun main() {
         println("2. Использовать зелье")
         println("1. Выйти из игры")
 
-        val choice = gameInput.getNumberInput("Введите действие: 1, 2, 3  ")
+        val choice = gameInput.getNumberInput("Введите действие: 1, 2, 3, 4  ")
         when(choice) {
             1 -> customPlayer.printStatus()
             2 -> customPlayer.usePotions()
             3 -> {
                 gameRunning = false
                 println("Выход из игры")
+            }
+            4 -> {
+                customPlayer.shield()
             }
         }
     }
