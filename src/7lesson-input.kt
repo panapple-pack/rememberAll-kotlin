@@ -12,7 +12,7 @@ open class Character(val name: String, var health: Int, var attack: Int) {
     fun attack(target: Character) {
         if (!isAlive || !target.isAlive) return
         val damage = Random.nextInt(attack - 3, attack + 4)  // случайный урон в диапазоне
-        println("$name получает ${target.name}!")
+        println("$name атакует ${target.name}!")
         target.takeDamage(damage)
     }
 }
